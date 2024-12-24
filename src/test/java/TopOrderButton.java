@@ -1,4 +1,5 @@
-import Methods.OrderMake;
+import pages.MainPage;
+import pages.OrderMake;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Test;
@@ -6,10 +7,8 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
 
-import static PageObject.MainPage.*;
-import static Methods.OrderMake.*;
+import static pages.MainPage.*;
 
 @RunWith(Parameterized.class)
 public class TopOrderButton {
@@ -42,17 +41,16 @@ public class TopOrderButton {
         WebDriver driver = new ChromeDriver();
         //System.setProperty("webdriver.gecko.driver","C:\\Program Files\\WebDriver\\bin\\geckordriver-win64\\geckodriver.exe");
         //WebDriver driver = new FirefoxDriver();
-        driver.get("https://qa-scooter.praktikum-services.ru/");
+        driver.get(URL);
 
-        driver.findElement(COOKIE_BUTTON).click();
-        driver.findElement(TOP_ORDER_BUTTON).click();
+        MainPage mainPage = new MainPage(driver);
+        mainPage.clickCookieButton();
 
         OrderMake order = new OrderMake(driver);
+        order.topOrderButtonClick();
         order.firstOrderPart(name,lastName,address,phoneNumber);
         order.secondOrderPart();
-
-        boolean isOrderSuccess = driver.findElement(By.className("Order_Modal__YZ-d3")).isDisplayed();
-        Assert.assertTrue(isOrderSuccess);
+        Assert.assertTrue(order.isOrderSuccess());
 
     }
     @After

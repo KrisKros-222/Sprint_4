@@ -1,4 +1,4 @@
-package Methods;
+package pages;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -7,8 +7,10 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import static PageObject.MainPage.BOTTOM_ORDER_BUTTON;
-import static PageObject.OrderPage.*;
+import java.util.Date;
+
+import static pages.MainPage.*;
+import static pages.OrderPage.*;
 
 public class OrderMake {
 
@@ -17,15 +19,14 @@ public class OrderMake {
         this.driver = driver;
     }
 
-    public static final By CURRENT_MONTH = By.className("react-datepicker__current-month");
-    public static final By CURRENT_DATE = By.xpath(".//div[@aria-label = 'Choose пятница, 27-е декабря 2024 г.']");
-    public static final By STATION_NAME = By.xpath(".//div[@class = 'select-search__select']/ul/li[1]");
-
-    //
     public void bottomOrderButtonClick() {
         WebElement element = driver.findElement(BOTTOM_ORDER_BUTTON);
         ((JavascriptExecutor)driver).executeScript("arguments[0].scrollIntoView();",element);
         driver.findElement(BOTTOM_ORDER_BUTTON).click();
+    }
+
+    public void topOrderButtonClick() {
+        driver.findElement(TOP_ORDER_BUTTON).click();
     }
 
     //метод заполняет поле Имя
@@ -46,16 +47,14 @@ public class OrderMake {
     //метод выбирает станцию метро
     public void chooseMetro() {
         driver.findElement(METRO_CHOOSE).click();
-        new WebDriverWait(driver,3).until(ExpectedConditions.elementToBeClickable(By.xpath(".//div[@class = 'select-search__select']/ul")));
+        new WebDriverWait(driver,3).until(ExpectedConditions.elementToBeClickable(STATIONS_LIST));
         driver.findElement(STATION_NAME).click();
     }
 
-    //
     public void inputPhone(String phoneNumber){
         driver.findElement(PHONE_INPUT).sendKeys(phoneNumber);
     }
 
-    //
     public void clickNextButton() {
         driver.findElement(NEXT_BUTTON).click();
     }
@@ -69,27 +68,25 @@ public class OrderMake {
         clickNextButton();
     }
 
-    //
     public void chooseDate() {
+        Date current = new Date();
         driver.findElement(DATE_CHOOSE).click();
         new WebDriverWait(driver,3).until(ExpectedConditions.elementToBeClickable(CURRENT_MONTH));
-        driver.findElement(CURRENT_DATE).click();
+        driver.findElement(By.xpath(".//div[text() = '" + (current.getDate()+1) + "']")).click();
     }
 
-    //
     public void chooseTime() {
         driver.findElement(TIME_CHOOSE).click();
-        new WebDriverWait(driver,3).until(ExpectedConditions.elementToBeClickable(By.className("Dropdown-menu")));
-        driver.findElement(By.xpath(".//div[@class = 'Dropdown-option' and text()='двое суток']")).click();
+        new WebDriverWait(driver,3).until(ExpectedConditions.elementToBeClickable(DROPDOWN_TIME_MENU));
+        driver.findElement(TWO_DAYS_TIME).click();
     }
 
-    //
     public void clickOrderButton() {
         driver.findElement(ORDER_BUTTON).click();
     }
 
     public void placeOrderOrNot() {
-        new WebDriverWait(driver,3).until(ExpectedConditions.elementToBeClickable(By.className("Order_Modal__YZ-d3")));
+        new WebDriverWait(driver,3).until(ExpectedConditions.elementToBeClickable(PLACE_ORDER_WINDOW));
         driver.findElement(YES_BUTTON).click();
     }
 
@@ -98,6 +95,12 @@ public class OrderMake {
         chooseTime();
         clickOrderButton();
         placeOrderOrNot();
+    }
+
+    public boolean isOrderSuccess() {
+        WebElement orderWindow = new WebDriverWait(driver,3)
+                .until(ExpectedConditions.visibilityOfElementLocated(PLACE_ORDER_WINDOW));
+        return orderWindow.isDisplayed();
     }
 
 }

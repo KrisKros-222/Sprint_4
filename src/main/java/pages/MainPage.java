@@ -1,8 +1,17 @@
-package PageObject;
+package pages;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 
 public class MainPage {
+
+    private WebDriver driver;
+    public MainPage(WebDriver driver){
+        this.driver = driver;
+    }
+
+    //Ссылка на страницу
+    public static final String URL = "https://qa-scooter.praktikum-services.ru/";
     // Слово "Яндекс"
     public static final By YANDEX_WORD = By.xpath(".//img[@alt = 'Yandex']");
     // Слово "Самокат"
@@ -25,4 +34,8 @@ public class MainPage {
     public static final By FOOTER_TEXT = By.className("App_CookieText__1sbqp");
     //Кнопка использования куки
     public static final By COOKIE_BUTTON = By.className("App_CookieButton__3cvqF");
+
+    public void clickCookieButton() {
+        driver.findElement(COOKIE_BUTTON).click();
+    }
 }
