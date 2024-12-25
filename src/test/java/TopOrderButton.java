@@ -1,5 +1,4 @@
 import pages.MainPage;
-import pages.OrderMake;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Test;
@@ -7,6 +6,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
+import pages.OrderPage;
 
 import static pages.MainPage.*;
 
@@ -46,7 +46,7 @@ public class TopOrderButton {
         MainPage mainPage = new MainPage(driver);
         mainPage.clickCookieButton();
 
-        OrderMake order = new OrderMake(driver);
+        OrderPage order = new OrderPage(driver);
         order.topOrderButtonClick();
         order.firstOrderPart(name,lastName,address,phoneNumber);
         order.secondOrderPart();
