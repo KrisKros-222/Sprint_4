@@ -50,5 +50,9 @@ public class Questions {
         Assert.assertEquals(expectedText,compare.getAnswerText());
 
     }
+    @After
+    public void tearDown(){
+        driver.quit();
+    }
 
 }
